@@ -8,15 +8,15 @@ const places = content.querySelector(`.places`);
 const placesList = places.querySelector(`.places__list`);
 
 //Функция создания карточки
-function createCard(values, del) {
+function createCard(cardData, removeCard) {
     const card = cardTemplate.querySelector(`.card`).cloneNode(true);
 
-    card.querySelector(`.card__image`).src = values.link;
-    card.querySelector(`.card__image`).alt = values.name;
-    card.querySelector(`.card__title`).textContent = values.name;
+    card.querySelector(`.card__image`).src = cardData.link;
+    card.querySelector(`.card__image`).alt = cardData.name;
+    card.querySelector(`.card__title`).textContent = cardData.name;
 
     card.querySelector(".card__delete-button").addEventListener('click', () => {
-        del(card);
+        removeCard(card);
     });
     return card;
 }
