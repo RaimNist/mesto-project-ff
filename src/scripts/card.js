@@ -1,20 +1,13 @@
-import initialCards from "./cards";
-import {likeCard, openImage} from "./modal.js"
 //Темплейт карточки
 const cardTemplate = document.querySelector(`#card-template`).content;
-
-//DOM узлы
-const container = document.querySelector(`.page`);
-const content = container.querySelector(`.content`);
-const places = content.querySelector(`.places`);
-const placesList = places.querySelector(`.places__list`);
 
 //Функция создания карточки
 function createCard(cardData, removeCard, likeCard, openImage) {
     const card = cardTemplate.querySelector(`.card`).cloneNode(true);
-
-    card.querySelector(`.card__image`).src = cardData.link;
-    card.querySelector(`.card__image`).alt = cardData.name;
+    const cardImage = card.querySelector(`.card__image`);
+    
+    cardImage.src = cardData.link;
+    cardImage.alt = cardData.name;
     card.querySelector(`.card__title`).textContent = cardData.name;
 
     likeCard(card);
@@ -31,9 +24,13 @@ function deleteCard(element) {
     element.remove();
 }
 
-//Вывести карточки на страницу
-initialCards.forEach(item => {
-    placesList.append(createCard(item, deleteCard, likeCard, openImage));
-});
+//Функция лайка карточки
+function likeCard(element) {
+    element.addEventListener('click', evt => {  
+        if(evt.target.classList.contains(`card__like-button`)) {
+            evt.target.classList.toggle(`card__like-button_is-active`);
+        }
+    })
+}
 
-export {createCard, deleteCard};
+export {createCard, deleteCard, likeCard};

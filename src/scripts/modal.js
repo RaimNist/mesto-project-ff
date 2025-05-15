@@ -1,4 +1,4 @@
-import { createCard, deleteCard } from "./card";
+import { createCard, deleteCard, likeCard } from "./card";
 //DOM
 const container = document.querySelector(`.page`);
 const content = container.querySelector(`.content`);
@@ -18,8 +18,6 @@ const formNewCard = addPopup.querySelector(`.popup__form`);
 const cardNameInput = formNewCard.querySelector(`.popup__input_type_card-name`);
 const cardLinkInput = formNewCard.querySelector(`.popup__input_type_url`);
 
-const profileEditBtn = content.querySelector(`.profile__edit-button`);
-const profileAddBtn = content.querySelector(`.profile__add-button`);
 const places = content.querySelector(`.places`);
 const placesList = places.querySelector(`.places__list`);
 
@@ -51,14 +49,6 @@ function closeOnKeyDown(evt) {  //при нажатии Esc
         closeModal(document.querySelector(`.popup_is-opened`));
     }
 }
-
-//Слушатели для кнопок открытия модальных окон
-profileEditBtn.addEventListener('click', () => {
-    openModal(editPopup);     
-});
-profileAddBtn.addEventListener('click', () => {
-    openModal(addPopup);
-})
 
 //Функция для кнопки Сохранить в форме редактирования профиля
 function handleFormSubmitEdit(evt) {
@@ -93,15 +83,6 @@ function handleFormSubmitNewCard(evt) {
 formProfile.addEventListener('submit', handleFormSubmitEdit);
 formNewCard.addEventListener('submit', handleFormSubmitNewCard);
 
-//Функция лайка карточки
-function likeCard(element) {
-    element.addEventListener('click', evt => {  
-        if(evt.target.classList.contains(`card__like-button`)) {
-            evt.target.classList.toggle(`card__like-button_is-active`);
-        }
-    })
-}
-
 //Функция открытия модального окна при клике на картинку карточки
 function openImage(element) {
     element.addEventListener('click', evt => {
@@ -114,4 +95,4 @@ function openImage(element) {
     })
 }
 
-export {openModal, closeModal, likeCard, openImage};
+export {openModal, closeModal, openImage, editPopup, addPopup};
