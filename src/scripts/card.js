@@ -11,7 +11,7 @@ function createCard(cardData, removeCard, likeCard, openImage) {
     card.querySelector(`.card__title`).textContent = cardData.name;
 
     likeCard(card);
-    openImage(card);
+    openImage(card, cardImage);
     card.querySelector(".card__delete-button").addEventListener('click', () => {
         removeCard(card);
     });
