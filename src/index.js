@@ -63,7 +63,6 @@ Promise.all([getUserInfo(), getCards()])
         // Рисуем карточки
         currentUserId = userData._id;
         initialCards.forEach(item => {
-            console.log(item)
             placesList.append(createCard(item, handleDeleteRequest, likeCard, openImage, currentUserId));
         });
     })
@@ -111,16 +110,18 @@ function handleFormSubmitEdit(evt) {
     const nameVal = nameInput.value;
     const jobVal = jobInput.value;
 
-    profileName.textContent = nameVal;
-    profileDesc.textContent = jobVal;
-
     renderLoading(true, editPopup);
     updateUserInfo(nameVal, jobVal)
+        .then((userData) => {
+            profileName.textContent = userData.name;
+            profileDesc.textContent = userData.about;
+        })
         .catch((err) => {
             console.log(err);
         })
         .finally(() => {
             renderLoading(false, editPopup);
+            closeModal(editPopup);
         });
 }
 
@@ -144,6 +145,7 @@ function handleFormSubmitNewCard(evt) {
         })
         .finally(() => {
             renderLoading(false, addPopup);
+            closeModal(addPopup);
         });
 }
 
@@ -166,6 +168,7 @@ function handleFormSubmitNewAvatar(evt) {
         })
         .finally(() => {
             renderLoading(false, editAvatarPopup);
+            closeModal(editAvatarPopup);
         });
 }
 
@@ -173,9 +176,10 @@ function handleFormSubmitNewAvatar(evt) {
 function handleFormRemoveCard(evt) {
     evt.preventDefault(); 
 
-    removeCard(cardToDelete, cardIdToDelete);
-
-    closeModal(removeCardPopup);
+    removeCard(cardToDelete, cardIdToDelete)
+        .then(() => {
+            closeModal(removeCardPopup);
+        })
 }
 
 function handleDeleteRequest(card, id) {
@@ -188,9 +192,12 @@ function handleDeleteRequest(card, id) {
 function openImage(element, image) {
     element.addEventListener('click', evt => {
         if(evt.target.contains(image)) {
-            imagePopup.querySelector(`.popup__image`).src = image.src;
-            imagePopup.querySelector(`.popup__image`).alt = image.alt;
-            imagePopup.querySelector(`.popup__caption`).textContent = element.querySelector(`.card__title`).textContent;
+            const imageElement = imagePopup.querySelector(`.popup__image`);
+            const imageCaption = imagePopup.querySelector(`.popup__caption`);
+            
+            imageElement.src = image.src;
+            imageElement.alt = image.alt;
+            imageCaption.textContent = element.querySelector(`.card__title`).textContent;
             openModal(imagePopup);
         };
     });

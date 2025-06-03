@@ -1,6 +1,4 @@
 import {deleteCard, addLike, removeLike} from './api';
-import {closeModal} from './modal';
-// import {removeCardPopup, cardToDelete, cardIdToDelete} from '../index';
 
 //Темплейт карточки
 const cardTemplate = document.querySelector(`#card-template`).content;
@@ -18,8 +16,8 @@ function createCard(cardData, handleDelete, likeCard, openImage, currentUserId) 
     if(cardData.likes) {
         likesCounter.textContent = cardData.likes.length;
 
-        cardData.likes.forEach((item) => {
-            if(item._id === currentUserId) {
+        cardData.likes.some((likeOwner) => {
+            if(likeOwner._id === currentUserId) {
                 card.querySelector(`.card__like-button`).classList.add(`card__like-button_is-active`);
             }
         })
@@ -42,22 +40,26 @@ function createCard(cardData, handleDelete, likeCard, openImage, currentUserId) 
 
 //Функция удаления карточки
 function removeCard(element, cardId) {
-    deleteCard(cardId)
+    return deleteCard(cardId)
+        .then(() => {
+            element.remove();
+        })
         .catch((err) => {
             console.log(err);
-        })
-    element.remove();
+        });
 }
 
 //Функция лайка карточки
 function likeCard(element, cardData, likesCounter) {
+    const likeButton = `card__like-button_is-active`;
     element.addEventListener('click', evt => {  
         if(evt.target.classList.contains(`card__like-button`)) {
-            if(!evt.target.classList.contains(`card__like-button_is-active`)) {
+            if(!evt.target.classList.contains(likeButton)) {
                 addLike(cardData._id)
                     .then((result) => {
                         likesCounter.textContent = result.likes.length;
                     })
+                    .then(() => {toggleLikeButton(evt, likeButton)})
                     .catch((err) => {
                         console.log(err);
                     }); 
@@ -66,14 +68,17 @@ function likeCard(element, cardData, likesCounter) {
                     .then((result) => {
                         likesCounter.textContent = result.likes.length;
                     })
+                    .then(() => {toggleLikeButton(evt, likeButton)})
                     .catch((err) => {
                         console.log(err);
                     });
             }
-
-            evt.target.classList.toggle(`card__like-button_is-active`);
         }
     })
+}
+
+function toggleLikeButton(evt, btn) {
+    evt.target.classList.toggle(btn);    
 }
 
 export {createCard, removeCard, likeCard};

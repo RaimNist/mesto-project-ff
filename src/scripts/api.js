@@ -12,7 +12,7 @@ function getUserInfo() {
     return fetch(`${config.baseUrl}/users/me`, {
         headers: config.headers
     })
-        .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`));
+        .then((res => getResponseData(res)));
 };
 
 //Загрузка карточек
@@ -20,7 +20,7 @@ function getCards() {
     return fetch(`${config.baseUrl}/cards`, {
         headers: config.headers
     })
-        .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)); 
+        .then((res => getResponseData(res))); 
 };
 
 //Изменение профиля
@@ -33,7 +33,7 @@ function updateUserInfo(name, about) {
       about: about
     })
   })
-  .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`));
+  .then((res => getResponseData(res)));
 };
 
 //Добаление карточки
@@ -46,7 +46,7 @@ function addNewCard(cardName, cardUrl) {
       link: cardUrl
     })
   })
-  .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`))
+  .then((res => getResponseData(res)))
 }
 
 function deleteCard(cardId) {
@@ -54,7 +54,7 @@ function deleteCard(cardId) {
     method: 'DELETE',
     headers: config.headers
   })
-    .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`));
+    .then((res => getResponseData(res)));
 }
 
 function addLike(cardId) {
@@ -62,7 +62,7 @@ function addLike(cardId) {
     method: 'PUT',
     headers: config.headers
   })
-    .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`));
+    .then((res => getResponseData(res)));
 }
 
 function removeLike(cardId) {
@@ -70,7 +70,7 @@ function removeLike(cardId) {
     method: 'DELETE',
     headers: config.headers
   })
-    .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`));
+    .then((res => getResponseData(res)));
 }
 
 function editAvatar(avatarUrl) {
@@ -81,7 +81,14 @@ function editAvatar(avatarUrl) {
       avatar: avatarUrl
     })
   })
-  .then(res => res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`));
+  .then((res => getResponseData(res)));
+}
+
+function getResponseData(res) {
+    if (!res.ok) {
+        return Promise.reject(`Ошибка: ${res.status}`); 
+    }
+    return res.json();
 }
 
 export {getUserInfo, getCards,  updateUserInfo, addNewCard, deleteCard, addLike, removeLike, editAvatar};
