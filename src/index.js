@@ -67,7 +67,7 @@ Promise.all([getUserInfo(), getCards()])
         });
     })
     .catch((err) => {
-        console.log(err);
+        console.log("Ошибка:", err);
     })
 
 
@@ -115,13 +115,13 @@ function handleFormSubmitEdit(evt) {
         .then((userData) => {
             profileName.textContent = userData.name;
             profileDesc.textContent = userData.about;
+            closeModal(editPopup);
         })
         .catch((err) => {
-            console.log(err);
+            console.log("Ошибка изменения профиля:", err);
         })
         .finally(() => {
             renderLoading(false, editPopup);
-            closeModal(editPopup);
         });
 }
 
@@ -141,11 +141,10 @@ function handleFormSubmitNewCard(evt) {
             closeModal(addPopup);
         })
         .catch((err) => {
-            console.log(err);
+            console.log("Ошибка добавления карточки:", err);
         })
         .finally(() => {
             renderLoading(false, addPopup);
-            closeModal(addPopup);
         });
 }
 
@@ -164,11 +163,10 @@ function handleFormSubmitNewAvatar(evt) {
             closeModal(editAvatarPopup);    
         })
         .catch((err) => {
-            console.log(err);
+            console.log("Ошибка изменения аватарки:", err);
         })
         .finally(() => {
             renderLoading(false, editAvatarPopup);
-            closeModal(editAvatarPopup);
         });
 }
 
@@ -179,6 +177,9 @@ function handleFormRemoveCard(evt) {
     removeCard(cardToDelete, cardIdToDelete)
         .then(() => {
             closeModal(removeCardPopup);
+        })
+        .catch((err) => {
+            console.log("Ошибка удаления:", err);
         })
 }
 

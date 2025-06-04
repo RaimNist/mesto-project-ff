@@ -46,6 +46,7 @@ function removeCard(element, cardId) {
         })
         .catch((err) => {
             console.log(err);
+            throw err;
         });
 }
 
@@ -58,8 +59,8 @@ function likeCard(element, cardData, likesCounter) {
                 addLike(cardData._id)
                     .then((result) => {
                         likesCounter.textContent = result.likes.length;
+                        toggleLikeButton(evt, likeButton);
                     })
-                    .then(() => {toggleLikeButton(evt, likeButton)})
                     .catch((err) => {
                         console.log(err);
                     }); 
@@ -67,8 +68,8 @@ function likeCard(element, cardData, likesCounter) {
                 removeLike(cardData._id)
                     .then((result) => {
                         likesCounter.textContent = result.likes.length;
+                        toggleLikeButton(evt, likeButton);
                     })
-                    .then(() => {toggleLikeButton(evt, likeButton)})
                     .catch((err) => {
                         console.log(err);
                     });
